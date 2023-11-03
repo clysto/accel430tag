@@ -1,0 +1,8 @@
+Diagnostics:
+  Suppress:
+    - non_asm_stmt_in_naked_function
+    - attribute_section_invalid_for_target
+    - -Wimplicit-function-declaration
+CompileFlags:
+  Add:
+    - -Wimplicit-function-declaration

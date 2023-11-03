@@ -1,0 +1,11 @@
+*.o
+*.map
+*.elf
+.vscode
+.DS_Store
+.envrc
+/build
+__pycache__
+.cache
+venv
+compile_commands.json
