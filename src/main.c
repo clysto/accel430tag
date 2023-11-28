@@ -3,8 +3,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "accel.h"
 #include "bs.h"
 #include "led.h"
+#include "spi.h"
 #include "uart.h"
 
 static void __attribute__((naked, section(".crt_0042"), used)) disable_watchdog(void) {
@@ -13,11 +15,13 @@ static void __attribute__((naked, section(".crt_0042"), used)) disable_watchdog(
 
 int main(void) {
     LED_init();
-    UART_init();
     PMM_unlockLPM5();
+    SPI_init();
+    ACCEL_init();
+    // Tx (P1.7) 配置为输出
     GPIO_setAsOutputPin(GPIO_PORT_P2, GPIO_PIN7);
 
-    LED_turnOnLED1();
+    LED_turnOnLED2();
 
     // 禁用 FRAM 等待周期以允许 8 MHz 以上的时钟操作
     FRAMCtl_configureWaitStateControl(FRAMCTL_ACCESS_TIME_CYCLES_1);
@@ -30,20 +34,21 @@ int main(void) {
     CS_enableClockRequest(CS_MCLK);
     CS_enableClockRequest(CS_SMCLK);
 
-    uint8_t data[64];
-
-    for (int i = 0; i < 64; i++) {
-        data[i] = i;
-    }
-
+    uint8_t data[32];
     int n = 0;
+    ACCEL_result result;
 
     for (;;) {
-        if (n >= 10) {
+        if (n >= 20) {
             LED_toggleLED1();
             n = 0;
         }
-        BS_transmitFrame(data, 64);
+        ACCEL_singleSample(&result);
+        // repeat 5 times to make sure the data is sent
+        for (int i = 0; i < 5; i++) {
+            memcpy(data + i * sizeof(result), &result, sizeof(result));
+        }
+        BS_transmitFrame(data, 32);
         __delay_cycles(8000);
         n++;
     }

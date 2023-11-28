@@ -10,7 +10,7 @@ CC      = msp430-elf-gcc
 OBJCOPY = msp430-elf-objcopy
 FLASHER = $(MSPFLASHER)/MSP430Flasher
 MAKETXT = srec_cat
-BSFREQ  = 10
+BSFREQ  = 6
 
 CFLAGS  = -I $(SUPPORT_FILE_DIR) -D__$(DEVICE)__ -I driverlib -mmcu=$(DEVICE) -O0 -Wall -g
 LDFLAGS = -L $(SUPPORT_FILE_DIR) -T $(shell echo $(DEVICE) | tr A-Z a-z).ld -Wl,-Map,$(BUILD_DIR)/$(DEVICE).map,--gc-sections

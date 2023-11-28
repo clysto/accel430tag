@@ -16,7 +16,7 @@ void BS_transmitData(uint8_t const* data, size_t size) {
         "MOV %2, R14\n"
         "CALLA #BS_transmitDataInternal\n"
         :
-        : "r"(30), "m"(data), "r"(size)
+        : "r"(10), "m"(data), "r"(size)
         : "R10", "R11", "R12", "R13", "R14", "R15");
 }
 
