@@ -39,7 +39,7 @@ int main(void) {
     ACCEL_result result;
 
     for (;;) {
-        if (n >= 20) {
+        if (n >= 100) {
             LED_toggleLED1();
             n = 0;
         }
@@ -49,7 +49,7 @@ int main(void) {
             memcpy(data + i * sizeof(result), &result, sizeof(result));
         }
         BS_transmitFrame(data, 32);
-        __delay_cycles(8000);
+        __delay_cycles(160000);
         n++;
     }
 
